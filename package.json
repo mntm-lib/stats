@@ -1,0 +1,45 @@
+{
+  "name": "@mntm/stats",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "jsnext:main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "sideEffects": [
+    "./lib/launch.js"
+  ],
+  "author": {
+    "name": "Anton Petrov",
+    "email": "im@petrov.engineer",
+    "url": "https://petrov.engineer"
+  },
+  "description": "A package for integrating analytics tools",
+  "license": "MIT",
+  "keywords": [
+    "vk",
+    "vkontakte",
+    "gtm",
+    "google-tag-manager",
+    "amplitude",
+    "stats",
+    "statistics",
+    "analytics"
+  ],
+  "homepage": "https://github.com/maxi-team/stats",
+  "bugs": "https://github.com/maxi-team/stats/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxi-team/stats.git"
+  },
+  "scripts": {
+    "build": "shx rm -rf lib && tsc"
+  },
+  "devDependencies": {
+    "@types/amplitude-js": "^8.0.1",
+    "@mntm/eslint-config": "^0.4.3",
+    "eslint": "^7.32.0",
+    "shx": "^0.3.3",
+    "typescript": "^4.4.4"
+  }
+}
