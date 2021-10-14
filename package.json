@@ -18,10 +18,14 @@
   "license": "MIT",
   "keywords": [
     "vk",
+    "vkcom",
     "vkontakte",
     "gtm",
     "google-tag-manager",
     "amplitude",
+    "fb",
+    "facebook",
+    "pixel",
     "stats",
     "statistics",
     "analytics"
