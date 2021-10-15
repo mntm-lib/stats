@@ -9,6 +9,8 @@ A package for integrating analytics tools.
 - [VK Statistics](https://vk.com/dev/statEvents.addMiniApps)
 - [Google Tag Manager](https://tagmanager.google.com)
 - [Amplitude](https://amplitude.com)
+- [Yandex Metrika](https://metrika.yandex.ru)
+- [Google Analytics](https://analytics.google.com)
 
 ## Implemented pixels
 

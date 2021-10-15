@@ -4,8 +4,8 @@ import type { AmplitudeClient } from 'amplitude-js';
 import { loadScript, thenable } from '../utils.js';
 import { launchParams } from '../launch.js';
 
-type Context = {
-  amplitude?: {
+type AmplitudeContext = {
+  amplitude: {
     getInstance?: (name: string) => AmplitudeClient;
   };
 };
@@ -16,20 +16,21 @@ type Context = {
  * @param code XXXXXXX
  */
 export const createProviderAMP = (code: string) => {
-  const context = window as unknown as Context;
+  const context = window as unknown as AmplitudeContext;
 
-  let logEvent: AmplitudeClient['logEvent'] | null = null;
+  context.amplitude = context.amplitude || {};
+
+  let instance: AmplitudeClient | null = null;
 
   const load = loadScript('https://cdn.amplitude.com/libs/amplitude-8.5.0-min.gz.js');
   const ready = load.then(() => {
     if (context.amplitude && context.amplitude.getInstance) {
-      const instance = context.amplitude.getInstance('$default_instance');
+      instance = context.amplitude.getInstance('$default_instance');
 
       instance.init(code, launchParams.vk_user_id, {
+        userId: launchParams.vk_user_id,
         includeUtm: true
       });
-
-      logEvent = instance.logEvent.bind(instance);
     } else {
       throw new Error('net::ERR_BLOCKED_BY_CLIENT');
     }
@@ -38,7 +39,7 @@ export const createProviderAMP = (code: string) => {
   const provider: Provider = {
     send(event, params) {
       return thenable(ready, () => {
-        logEvent!(event, params.params);
+        instance!.logEvent(event, params.params);
       });
     }
   };

@@ -1,6 +1,6 @@
 import { loadScript, thenable } from '../utils.js';
 
-type ProductEvent =
+type VKProductEvent =
   'view_home' |
   'view_category' |
   'view_product' |
@@ -14,7 +14,7 @@ type ProductEvent =
   'add_payment_info' |
   'purchase';
 
-type Product = Partial<{
+type VKProduct = Partial<{
   id: string;
   group_id: string;
   recommended_ids: string;
@@ -23,8 +23,8 @@ type Product = Partial<{
   price_from: boolean;
 }>;
 
-type ProductPrams = Partial<{
-  products: Product[];
+type VKProductPrams = Partial<{
+  products: VKProduct[];
   products_recommended_ids: string;
   category_ids: string;
   business_value: number;
@@ -33,7 +33,7 @@ type ProductPrams = Partial<{
   search_string: string;
 }>;
 
-type GoalEvent =
+type VKGoalEvent =
   'add_to_cart' |
   'add_to_wishlist' |
   'customize_product' |
@@ -54,12 +54,12 @@ type GoalEvent =
   'donate' |
   'conversion';
 
-type GoalParams = {
+type VKGoalParams = {
   value: number;
 };
 
-type Context = {
-  VK?: {
+type VKContext = {
+  VK: {
     Retargeting: {
       Init: (code: string) => void;
       Hit: () => void;
@@ -67,16 +67,16 @@ type Context = {
       ProductEvent: (id: number, event: string, params: Record<string, unknown>) => void;
       Add: (id: number) => void;
     };
-    Goal: (goal: string, params: GoalParams) => void;
+    Goal: (goal: string, params: VKGoalParams) => void;
   };
 };
 
-type Pixel = {
+type VKPixel = {
   hit: () => Promise<boolean>;
   event: (event: string) => Promise<boolean>;
   audience: (id: number) => Promise<boolean>;
-  product: (id: number, event: ProductEvent, params?: ProductPrams) => Promise<boolean>;
-  goal: (goal: GoalEvent, value?: number) => Promise<boolean>;
+  product: (id: number, event: VKProductEvent, params?: VKProductPrams) => Promise<boolean>;
+  goal: (goal: VKGoalEvent, value?: number) => Promise<boolean>;
 };
 
 /**
@@ -87,7 +87,7 @@ type Pixel = {
 export const createPixelVK = (code: string) => {
   /* eslint-disable new-cap */
 
-  const context = window as unknown as Context;
+  const context = window as unknown as VKContext;
 
   const load = loadScript('https://vk.com/js/api/openapi.js?169');
   const ready = load.then(() => {
@@ -98,30 +98,30 @@ export const createPixelVK = (code: string) => {
     }
   });
 
-  const pixel: Pixel = {
+  const pixel: VKPixel = {
     hit() {
       return thenable(ready, () => {
-        context.VK!.Retargeting.Hit();
+        context.VK.Retargeting.Hit();
       });
     },
     event(event) {
       return thenable(ready, () => {
-        context.VK!.Retargeting.Event(event);
+        context.VK.Retargeting.Event(event);
       });
     },
     product(id, event, params) {
       return thenable(ready, () => {
-        context.VK!.Retargeting.ProductEvent(id, event, params || {});
+        context.VK.Retargeting.ProductEvent(id, event, params || {});
       });
     },
     audience(id) {
       return thenable(ready, () => {
-        context.VK!.Retargeting.Add(id);
+        context.VK.Retargeting.Add(id);
       });
     },
     goal(goal, value) {
       return thenable(ready, () => {
-        context.VK!.Goal(goal, { value: value || 0 });
+        context.VK.Goal(goal, { value: value || 0 });
       });
     }
   };

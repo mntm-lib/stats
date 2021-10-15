@@ -1,6 +1,6 @@
 import { loadScript, thenable } from '../utils.js';
 
-type Params = {
+type FBParams = {
   content_category: string;
   content_ids: Array<string | number>;
   content_name: string;
@@ -19,63 +19,63 @@ type Params = {
   value: number;
 };
 
-type PartialParams = Partial<Params>;
+type FBPartialParams = Partial<FBParams>;
 
-type TypesTrack = {
-  AddPaymentInfo: Pick<PartialParams, 'content_category' | 'content_ids' | 'contents' | 'currency' | 'value'>;
-  AddToCart: Pick<PartialParams, 'content_ids' | 'content_name' | 'content_type' | 'contents' | 'currency' | 'value'>;
-  AddToWishlist: Pick<PartialParams, 'content_name' | 'content_category' | 'content_ids' | 'contents' | 'currency' | 'value'>;
-  CompleteRegistration: Pick<PartialParams, 'content_name' | 'currency' | 'status' | 'value'>;
+type FBTypesTrack = {
+  AddPaymentInfo: Pick<FBPartialParams, 'content_category' | 'content_ids' | 'contents' | 'currency' | 'value'>;
+  AddToCart: Pick<FBPartialParams, 'content_ids' | 'content_name' | 'content_type' | 'contents' | 'currency' | 'value'>;
+  AddToWishlist: Pick<FBPartialParams, 'content_name' | 'content_category' | 'content_ids' | 'contents' | 'currency' | 'value'>;
+  CompleteRegistration: Pick<FBPartialParams, 'content_name' | 'currency' | 'status' | 'value'>;
   Contact: Record<never, never>;
   CustomizeProduct: Record<never, never>;
   Donate: Record<never, never>;
   FindLocation: Record<never, never>;
-  InitiateCheckout: Pick<PartialParams, 'content_category' | 'content_ids' | 'contents' | 'currency' | 'num_items' | 'value'>;
-  Lead: Pick<PartialParams, 'content_category' | 'content_name' | 'currency' | 'value'>;
+  InitiateCheckout: Pick<FBPartialParams, 'content_category' | 'content_ids' | 'contents' | 'currency' | 'num_items' | 'value'>;
+  Lead: Pick<FBPartialParams, 'content_category' | 'content_name' | 'currency' | 'value'>;
   PageView: Record<never, never>;
-  Purchase: Pick<PartialParams, 'content_ids' | 'content_name' | 'content_type' | 'contents' | 'num_items'> & Pick<Params, 'currency' | 'value'>;
+  Purchase: Pick<FBPartialParams, 'content_ids' | 'content_name' | 'content_type' | 'contents' | 'num_items'> & Pick<FBParams, 'currency' | 'value'>;
   Schedule: Record<never, never>;
-  Search: Pick<PartialParams, 'content_category' | 'content_ids' | 'contents' | 'currency' | 'search_string' | 'value'>;
-  StartTrial: Pick<PartialParams, 'currency' | 'predicted_ltv' | 'value'>;
+  Search: Pick<FBPartialParams, 'content_category' | 'content_ids' | 'contents' | 'currency' | 'search_string' | 'value'>;
+  StartTrial: Pick<FBPartialParams, 'currency' | 'predicted_ltv' | 'value'>;
   SubmitApplication: Record<never, never>;
-  Subscribe: Pick<PartialParams, 'currency' | 'predicted_ltv' | 'value'>;
-  ViewContent: Pick<PartialParams, 'content_ids' | 'content_category' | 'content_name' | 'content_type' | 'contents' | 'currency' | 'value'>;
+  Subscribe: Pick<FBPartialParams, 'currency' | 'predicted_ltv' | 'value'>;
+  ViewContent: Pick<FBPartialParams, 'content_ids' | 'content_category' | 'content_name' | 'content_type' | 'contents' | 'currency' | 'value'>;
 };
 
-type TypesCustom = Record<string, Record<string, unknown>>;
+type FBTypesCustom = Record<string, Record<string, unknown>>;
 
-type Pixel = {
-  track: <T extends keyof TypesTrack>(event: T, params?: TypesTrack[T] | undefined) => Promise<boolean>;
-  custom: <T extends keyof TypesCustom>(event: T, params?: TypesCustom[T] | undefined) => Promise<boolean>;
+type FBPixel = {
+  track: <T extends keyof FBTypesTrack>(event: T, params?: FBTypesTrack[T] | undefined) => Promise<boolean>;
+  custom: <T extends keyof FBTypesCustom>(event: T, params?: FBTypesCustom[T] | undefined) => Promise<boolean>;
 };
 
-type Callable = (track: string, event: string, params: Record<string, unknown>) => void;
-type Implementation = {
+type FBCallable = (track: string, event: string, params: Record<string, unknown>) => void;
+type FBImplementation = {
   loaded: boolean;
   version: string;
-  push: Callable;
-  callMethod?: Callable;
-  queue: Array<Parameters<Callable>>;
+  push: FBCallable;
+  callMethod?: FBCallable;
+  queue: Array<Parameters<FBCallable>>;
 };
 
-type FBQ = Callable & Implementation;
+type FBQ = FBCallable & FBImplementation;
 
-type Context = {
+type FBContext = {
   fbq: FBQ;
   _fbq: FBQ;
 };
 
 /**
- * Implement Facebook Pixel
+ * Implement FB Pixel
  *
  * @param code XXXXXXX
  */
 export const createPixelFB = (code: string) => {
-  const context = window as unknown as Context;
+  const context = window as unknown as FBContext;
 
   const callable = function(this: FBQ) {
     // eslint-disable-next-line prefer-rest-params
-    const args = arguments as unknown as Parameters<Callable>;
+    const args = arguments as unknown as Parameters<FBCallable>;
 
     if (this.callMethod) {
       this.callMethod.apply(this, args);
@@ -100,7 +100,7 @@ export const createPixelFB = (code: string) => {
     fbq('track', 'PageView', {});
   });
 
-  const pixel: Pixel = {
+  const pixel: FBPixel = {
     track(event, params) {
       return thenable(ready, () => {
         fbq('track', event, params || {});

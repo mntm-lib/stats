@@ -18,7 +18,9 @@ export {
 export {
   createProviderGTM,
   createProviderVK,
-  createProviderAMP
+  createProviderAMP,
+  createProviderYM,
+  createProviderGA
 } from './providers/index.js';
 
 export {
