@@ -44,8 +44,8 @@ export const createProviderGA = (code: string, init: GAInit): Provider => {
     send(event, params) {
       return thenable(ready, () => {
         context.gtag('event', event, {
-          event_category: params.category,
-          event_label: params.label,
+          event_category: params.category || 'main',
+          event_label: params.label || '',
           screen_name: params.screen || 'unknown'
         });
       });

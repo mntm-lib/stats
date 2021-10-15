@@ -39,13 +39,13 @@ yarn add @mntm/stats
 
 ```typescript
 {
-  // [GTM|VK] event category
+  // [GTM|GA|VK] event category
   category: string;
 
-  // [GTM] event label
+  // [GTM|GA] event label
   label: string;
 
-  // [VK] screen where event occurred
+  // [VK|GA] screen where event occurred
   screen: string;
 
   // [VK|AMP] additional parameters
