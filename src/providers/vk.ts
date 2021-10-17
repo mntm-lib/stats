@@ -9,7 +9,7 @@ import { launchParams } from '../launch.js';
  * @param api Implementation of VK API
  * @see Implementation with VKWebAppCallAPIMethod and valid token
  */
-export const createProviderVK = (api: (params: { method: string; params: Record<string, unknown> }) => Promise<unknown>): Provider => {
+export const createProviderVK = (api: (method: string, params: Record<string, any>) => Promise<any>): Provider => {
   const zone = `gtm${Math.round(-1 * new Date().getTimezoneOffset() / 60)}`;
   const app = Number(launchParams.vk_app_id) || 0;
   const user = Number(launchParams.vk_user_id) || 0;
@@ -36,17 +36,14 @@ export const createProviderVK = (api: (params: { method: string; params: Record<
 
       event += '_front';
 
-      return api({
-        method: 'statEvents.addMiniApps',
-        params: {
-          events: [Object.assign({}, base, {
-            event,
-            url: window.location.href,
-            timestamp: Math.round(Date.now() / 1000),
-            screen: params.screen || 'unknown',
-            json: JSON.stringify(params.params || {})
-          })]
-        }
+      return api('statEvents.addMiniApps', {
+        events: [Object.assign({}, base, {
+          event,
+          url: window.location.href,
+          timestamp: Math.round(Date.now() / 1000),
+          screen: params.screen || 'unknown',
+          json: JSON.stringify(params.params || {})
+        })]
       }).then(() => {
         return true;
       }).catch(() => {
