@@ -45,7 +45,7 @@ yarn add @mntm/stats
   // [GTM|GA] event label
   label: string;
 
-  // [VK|GA] screen where event occurred
+  // [VK|GA|YM] screen where event occurred
   screen: string;
 
   // [VK|AMP] additional parameters

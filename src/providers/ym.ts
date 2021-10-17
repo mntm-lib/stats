@@ -61,7 +61,8 @@ export const createProviderYM = (code: number, init: YMInit): Provider => {
       return thenable(ready, () => {
         context.ym(code, 'reachGoal', event, {
           category: params.category,
-          label: params.label
+          label: params.label,
+          screen: params.screen || 'unknown'
         });
       });
     }
