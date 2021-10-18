@@ -53,7 +53,7 @@ type FBCallable = (track: string, event: string, params: Record<string, unknown>
 type FBImplementation = {
   loaded: boolean;
   version: string;
-  push: FBCallable;
+  push?: FBCallable;
   callMethod?: FBCallable;
   queue: Array<Parameters<FBCallable>>;
 };
@@ -73,42 +73,39 @@ type FBContext = {
 export const createPixelFB = (code: string) => {
   const context = window as unknown as FBContext;
 
-  const callable = function(this: FBQ) {
+  context.fbq = Object.assign(function fbq() {
     // eslint-disable-next-line prefer-rest-params
     const args = arguments as unknown as Parameters<FBCallable>;
 
-    if (this.callMethod) {
-      this.callMethod.apply(this, args);
+    if (context.fbq.callMethod) {
+      context.fbq.callMethod.apply(context.fbq, args);
     } else {
-      this.queue.push(args);
+      context.fbq.queue.push(args);
     }
-  };
-
-  const fbq: FBQ = Object.assign(callable, {
-    push: callable,
+  }, {
     loaded: true,
     version: '2.0',
     queue: []
   });
 
-  context.fbq = fbq;
-  context._fbq = fbq;
+  context.fbq.push = context.fbq;
+  context._fbq = context.fbq;
 
   const load = loadScript('https://connect.facebook.net/en_US/fbevents.js');
   const ready = load.then(() => {
-    fbq('init', code, {});
-    fbq('track', 'PageView', {});
+    context.fbq('init', code, {});
+    context.fbq('track', 'PageView', {});
   });
 
   const pixel: FBPixel = {
     track(event, params) {
       return thenable(ready, () => {
-        fbq('track', event, params || {});
+        context.fbq('track', event, params || {});
       });
     },
     custom(event, params) {
       return thenable(ready, () => {
-        fbq('trackCustom', event, params || {});
+        context.fbq('trackCustom', event, params || {});
       });
     }
   };

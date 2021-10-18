@@ -32,19 +32,16 @@ type YMContext = {
 export const createProviderYM = (code: number, init: YMInit): Provider => {
   const context = window as unknown as YMContext;
 
-  const callable: YMCallable = function(this: YM) {
+  context.ym = Object.assign(function ym() {
     // eslint-disable-next-line prefer-rest-params
     const args = arguments as unknown as Parameters<YMCallable>;
 
-    this.a.push(args);
-  };
-
-  const ym = Object.assign(callable, {
+    context.ym.a.push(args);
+  }, {
     a: [],
     l: Date.now()
   });
 
-  context.ym = ym;
   context.ym(code, 'init', init);
   context.ym(code, 'setUserID', launchParams.vk_user_id);
 

@@ -22,9 +22,11 @@ export const createProviderGA = (code: string, init: GAInit): Provider => {
   const context = window as unknown as GAContext;
 
   context.ga = context.ga || [];
-  context.gtag = function(this: GAContext) {
+  context.gtag = function gtag() {
     // eslint-disable-next-line prefer-rest-params
-    context.ga.push(arguments);
+    const args = arguments;
+
+    context.ga.push(args);
   };
 
   context.gtag('consent', 'default', init);
