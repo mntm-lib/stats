@@ -3,11 +3,16 @@
  */
 export const parseParams = (from: string) => {
   const params: Record<string, string> = {};
+
+  if (from === '') {
+    return params;
+  }
+
   let match = null;
-  const paramsRegex = /([\w-]+)=([\w-]+)/g;
+  const paramsRegex = /([^&=?]+)(?:=([^&]*))?/g;
 
   while ((match = paramsRegex.exec(from)) !== null) {
-    params[match[1]] = match[2];
+    params[match[1]] = match[2] || '';
   }
 
   return params;
@@ -42,13 +47,19 @@ export const launchHash = (() => {
     return {};
   }
 
-  const query = hash.indexOf('?');
+  const hashQuery = hash.indexOf('?');
 
-  if (query === -1) {
-    return parseParams(hash);
+  if (hashQuery !== -1) {
+    return parseParams(hash.slice(hashQuery + 1));
   }
 
-  return parseParams(hash.slice(query + 1));
+  const hashPath = hash.indexOf('/');
+
+  if (hashPath !== -1) {
+    return {};
+  }
+
+  return parseParams(hash);
 })();
 
 /**
@@ -58,6 +69,8 @@ export const launchParams = (() => {
   if (params === '') {
     return {};
   }
+
+  // TODO: check params
 
   return parseParams(params);
 })();
@@ -80,7 +93,9 @@ export const prepareParams = () => {
     assign += `${key}=${launch[key]}`;
   }
 
-  assign += `#${hash}`;
+  if (hash !== '') {
+    assign += `#${hash}`;
+  }
 
   window.history.replaceState(null, '', assign);
 };
