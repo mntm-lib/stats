@@ -3,3 +3,4 @@ export { createProviderVK } from './vk.js';
 export { createProviderAMP } from './amp.js';
 export { createProviderYM } from './ym.js';
 export { createProviderGA } from './ga.js';
+export { createProviderUA } from './ua.js';

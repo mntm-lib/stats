@@ -11,7 +11,7 @@ type GAContext = {
 /**
  * Implements Google Analytics
  *
- * @param code G-XXXXXXX or UA-XXXXXXX
+ * @param code G-XXXXXXX
  */
 export const createProviderGA = (code: string): Provider => {
   const context = window as unknown as GAContext;

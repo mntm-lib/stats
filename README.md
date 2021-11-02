@@ -11,6 +11,7 @@ A package for integrating analytics tools.
 - [Amplitude](https://amplitude.com)
 - [Yandex Metrika](https://metrika.yandex.ru)
 - [Google Analytics](https://analytics.google.com)
+- [Universal Analytics](https://analytics.google.com)
 
 ## Implemented pixels
 
@@ -39,13 +40,13 @@ yarn add @mntm/stats
 
 ```typescript
 {
-  // [GTM|GA|VK] event category
+  // [GTM|GA|UA|VK] event category
   category: string;
 
-  // [GTM|GA] event label
+  // [GTM|GA|UA] event label
   label: string;
 
-  // [VK|GA|YM] screen where event occurred
+  // [VK|GA|UA|YM] screen where event occurred
   screen: string;
 
   // [VK|AMP] additional parameters

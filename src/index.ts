@@ -20,7 +20,8 @@ export {
   createProviderVK,
   createProviderAMP,
   createProviderYM,
-  createProviderGA
+  createProviderGA,
+  createProviderUA
 } from './providers/index.js';
 
 export {
