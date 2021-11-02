@@ -3,11 +3,6 @@ import type { Provider } from '../types.js';
 import { loadScript, thenable } from '../utils.js';
 import { launchParams } from '../launch.js';
 
-type GAInit = Partial<{
-  ad_storage: 'allowed' | 'denied';
-  analytics_storage: 'allowed' | 'denied';
-}>;
-
 type GAContext = {
   ga: unknown[];
   gtag: (...params: unknown[]) => void;
@@ -16,9 +11,9 @@ type GAContext = {
 /**
  * Implements Google Analytics
  *
- * @param code G-XXXXXXX
+ * @param code G-XXXXXXX or UA-XXXXXXX
  */
-export const createProviderGA = (code: string, init: GAInit): Provider => {
+export const createProviderGA = (code: string): Provider => {
   const context = window as unknown as GAContext;
 
   context.ga = context.ga || [];
@@ -29,10 +24,22 @@ export const createProviderGA = (code: string, init: GAInit): Provider => {
     context.ga.push(args);
   };
 
-  context.gtag('consent', 'default', init);
   context.gtag('js', new Date());
+  context.gtag('consent', 'default', {
+    // Disable cookie (Modern)
+    ad_storage: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 0
+  });
   context.gtag('config', code, {
-    user_id: launchParams.vk_user_id
+    user_id: launchParams.vk_user_id,
+
+    // Disable cookie (Legacy)
+    storage: 'none',
+    client_storage: 'none'
+  });
+  context.gtag('set', 'user_properties', {
+    crm_id: launchParams.vk_user_id
   });
 
   const load = loadScript(`https://www.googletagmanager.com/gtag/js?id=${code}&l=ga`);
