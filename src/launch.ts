@@ -1,3 +1,5 @@
+import { safeDocument, safeWindow } from './dom.js';
+
 /**
  * Parses any query string
  */
@@ -23,21 +25,21 @@ export const parseParams = (from: string) => {
  * @see location.pathname docs
  * @noinline
  */
-export const path = /*#__NOINLINE__*/window.location.pathname;
+export const path = /*#__NOINLINE__*/safeWindow.location.pathname;
 
 /**
  * Launch hash without number sign (#)
  * @see location.hash docs
  * @noinline
  */
-export const hash = /*#__NOINLINE__*/window.location.hash.slice(1);
+export const hash = /*#__NOINLINE__*/safeWindow.location.hash.slice(1);
 
 /**
  * Launch search without question mark (?)
  * @see location.search docs
  * @noinline
  */
-export const params = /*#__NOINLINE__*/window.location.search.slice(1);
+export const params = /*#__NOINLINE__*/safeWindow.location.search.slice(1);
 
 /**
  * Parsed launch hash
@@ -97,5 +99,5 @@ export const prepareParams = () => {
     assign += `#${hash}`;
   }
 
-  window.history.replaceState(null, '', assign);
+  safeWindow.history.replaceState(safeWindow.history.state, safeDocument.title, assign);
 };

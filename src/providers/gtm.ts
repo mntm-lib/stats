@@ -2,6 +2,7 @@ import type { Provider } from '../types.js';
 
 import { loadScript, thenable } from '../utils.js';
 import { launchParams } from '../launch.js';
+import { safeWindow } from '../dom.js';
 
 type GTMContext = {
   gtm: unknown[];
@@ -13,7 +14,7 @@ type GTMContext = {
  * @param code GTM-XXXXXXX
  */
 export const createProviderGTM = (code: string): Provider => {
-  const context = window as unknown as GTMContext;
+  const context = safeWindow as unknown as GTMContext;
 
   context.gtm = context.gtm || [];
   context.gtm.push({

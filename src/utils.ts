@@ -1,13 +1,15 @@
+import { safeDocument, safeWindow } from './dom.js';
+
 // Internal
 export const loadScript = (src: string) => {
   return new Promise<void>((resolve, reject) => {
     // Wait execute
-    const onSuccess = () => setTimeout(resolve, 0);
-    const onFail = () => setTimeout(reject, 0);
+    const onSuccess = () => safeWindow.setTimeout(resolve, 0);
+    const onFail = () => safeWindow.setTimeout(reject, 0);
 
     // Dont block event loop
-    requestAnimationFrame(() => {
-      document.body.appendChild(Object.assign(document.createElement('script'), {
+    safeWindow.requestAnimationFrame(() => {
+      safeDocument.body.appendChild(Object.assign(safeDocument.createElement('script'), {
         src,
         type: 'text/javascript',
         async: true,

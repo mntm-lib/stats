@@ -1,3 +1,4 @@
+import { safeWindow } from '../dom.js';
 import { loadScript, thenable } from '../utils.js';
 
 type VKProductEvent =
@@ -87,7 +88,7 @@ type VKPixel = {
 export const createPixelVK = (code: string) => {
   /* eslint-disable new-cap */
 
-  const context = window as unknown as VKContext;
+  const context = safeWindow as unknown as VKContext;
 
   const load = loadScript('https://vk.com/js/api/openapi.js?169');
   const ready = load.then(() => {

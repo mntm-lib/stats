@@ -2,6 +2,7 @@ import type { Provider } from '../types.js';
 
 import { loadScript, thenable } from '../utils.js';
 import { launchParams } from '../launch.js';
+import { safeWindow } from '../dom.js';
 
 type GAContext = {
   ga: unknown[];
@@ -14,7 +15,7 @@ type GAContext = {
  * @param code G-XXXXXXX
  */
 export const createProviderGA = (code: string): Provider => {
-  const context = window as unknown as GAContext;
+  const context = safeWindow as unknown as GAContext;
 
   context.ga = context.ga || [];
   context.gtag = function gtag() {

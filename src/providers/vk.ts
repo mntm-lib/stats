@@ -1,6 +1,7 @@
 import type { Provider } from '../types.js';
 
 import { launchParams } from '../launch.js';
+import { safeWindow } from '../dom.js';
 
 // Type inlined for easy integration
 /**
@@ -39,7 +40,7 @@ export const createProviderVK = (api: (method: string, params: Record<string, an
       return api('statEvents.addMiniApps', {
         events: [Object.assign({}, base, {
           event,
-          url: window.location.href,
+          url: safeWindow.location.href,
           timestamp: Math.round(Date.now() / 1000),
           screen: params.screen || 'unknown',
           json: JSON.stringify(params.params || {})

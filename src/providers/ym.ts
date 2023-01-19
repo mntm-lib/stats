@@ -2,6 +2,7 @@ import type { Provider } from '../types.js';
 
 import { loadScript, thenable } from '../utils.js';
 import { launchParams } from '../launch.js';
+import { safeWindow } from '../dom.js';
 
 type YMInit = Partial<{
   clickmap: boolean;
@@ -30,7 +31,7 @@ type YMContext = {
  * @param code XXXXXXX
  */
 export const createProviderYM = (code: number, init: YMInit): Provider => {
-  const context = window as unknown as YMContext;
+  const context = safeWindow as unknown as YMContext;
 
   context.ym = Object.assign(function ym() {
     // eslint-disable-next-line prefer-rest-params

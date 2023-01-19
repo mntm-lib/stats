@@ -1,3 +1,4 @@
+import { safeWindow } from '../dom.js';
 import { loadScript, thenable } from '../utils.js';
 
 type FBParams = {
@@ -71,7 +72,7 @@ type FBContext = {
  * @param code XXXXXXX
  */
 export const createPixelFB = (code: string) => {
-  const context = window as unknown as FBContext;
+  const context = safeWindow as unknown as FBContext;
 
   context.fbq = Object.assign(function fbq() {
     // eslint-disable-next-line prefer-rest-params

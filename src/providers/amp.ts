@@ -3,6 +3,7 @@ import type { AmplitudeClient } from 'amplitude-js';
 
 import { loadScript, thenable } from '../utils.js';
 import { launchParams } from '../launch.js';
+import { safeWindow } from '../dom.js';
 
 type AmplitudeContext = {
   amplitude: {
@@ -16,13 +17,13 @@ type AmplitudeContext = {
  * @param code XXXXXXX
  */
 export const createProviderAMP = (code: string) => {
-  const context = window as unknown as AmplitudeContext;
+  const context = safeWindow as unknown as AmplitudeContext;
 
   context.amplitude = context.amplitude || {};
 
   let instance: AmplitudeClient | null = null;
 
-  const load = loadScript('https://cdn.amplitude.com/libs/amplitude-8.5.0-min.gz.js');
+  const load = loadScript('https://cdn.amplitude.com/libs/amplitude-8.21.4-min.gz.js');
   const ready = load.then(() => {
     if (context.amplitude && context.amplitude.getInstance) {
       instance = context.amplitude.getInstance('$default_instance');

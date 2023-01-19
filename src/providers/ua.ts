@@ -2,6 +2,7 @@ import type { Provider } from '../types.js';
 
 import { loadScript, thenable } from '../utils.js';
 import { launchParams } from '../launch.js';
+import { safeWindow } from '../dom.js';
 
 type UACallable = (...params: unknown[]) => void;
 type UAImplementation = {
@@ -23,7 +24,7 @@ type UAContext = {
  * @param code UA-XXXXXXX
  */
 export const createProviderUA = (code: string): Provider => {
-  const context = window as unknown as UAContext;
+  const context = safeWindow as unknown as UAContext;
 
   context.GoogleAnalyticsObject = 'ua';
   context.ua = Object.assign(function ua() {
